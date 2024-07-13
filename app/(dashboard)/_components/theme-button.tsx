@@ -5,7 +5,7 @@ import { useTheme } from "next-themes";
 import { Button } from "@/components/ui/button";
 import { useEffect, useState } from "react";
 
-export function ThemeButton() {
+export default function ThemeButton() {
   const [mounted, setMounted] = useState(false);
   const { theme, setTheme } = useTheme();
 

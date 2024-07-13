@@ -6,6 +6,8 @@ import { SidebarLinks } from "@/lib/sidebar-links";
 import { usePathname } from "next/navigation";
 import { cn } from "@/lib/utils";
 
+import { Badge } from "@/components/ui/badge";
+
 export default function Sidebar() {
   const pathname = usePathname();
   const menu = SidebarLinks(pathname);
@@ -31,6 +33,11 @@ export default function Sidebar() {
               >
                 <item.icon className="h-4 w-4" />
                 {item.label}
+                {item.badge && (
+                  <Badge className="ml-auto flex h-6 w-6 shrink-0 items-center justify-center rounded-full">
+                    1
+                  </Badge>
+                )}
               </Link>
             ))}
           </nav>
