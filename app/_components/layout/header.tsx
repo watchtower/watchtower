@@ -13,9 +13,9 @@ import { SidebarLinks } from "@/lib/sidebar-links";
 import { usePathname } from "next/navigation";
 import { cn } from "@/lib/utils";
 
-import ThemeButton from "./theme-button";
-import Notification from "./notification";
-import StatusBanner from "./status-banner";
+import ThemeButton from "../theme-button";
+import Notification from "../notification";
+import StatusBanner from "../status-banner";
 
 export default function Header() {
   const pathname = usePathname();

@@ -13,7 +13,7 @@ import {
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 
-import { onAddMonitor } from "@/actions/add-monitor";
+import { onAddMonitor } from "@/actions/monitor";
 import { useState, useTransition } from "react";
 
 import { toast } from "sonner";
