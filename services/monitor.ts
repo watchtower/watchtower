@@ -22,7 +22,11 @@ export async function deleteMonitor(id: string) {
 }
 
 export async function getMonitors() {
-  const monitors = await db.monitors.findMany();
+  const monitors = await db.monitors.findMany({
+    orderBy: {
+      updatedAt: "desc",
+    },
+  });
   return monitors;
 }
 

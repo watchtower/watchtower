@@ -21,21 +21,23 @@ import { toast } from "sonner";
 export default function AddMonitor() {
   const [name, setName] = useState("");
   const [url, setUrl] = useState("");
+  const [open, setOpen] = useState(false);
 
   const [isPending, startTransition] = useTransition();
   function handleAddMonitor() {
     startTransition(() => {
       onAddMonitor(name, url)
-        .then((data) =>
-          toast.success(`Monitor ${data.name} added successfully`)
-        )
+        .then((data) => {
+          setOpen(false);
+          toast.success("Monitor added successfully");
+        })
         .catch(() => toast.error("Something went wrong"));
     });
   }
   return (
-    <Dialog>
+    <Dialog open={open} onOpenChange={setOpen}>
       <DialogTrigger asChild>
-        <Button className="mt-4">Add Monitor</Button>
+        <Button>Add Monitor</Button>
       </DialogTrigger>
       <DialogContent className="sm:max-w-[425px]">
         <DialogHeader>
@@ -52,6 +54,7 @@ export default function AddMonitor() {
             <Input
               placeholder="Example"
               className="col-span-3"
+              disabled={isPending}
               onChange={(e) => setName(e.target.value)}
             />
           </div>
@@ -62,6 +65,7 @@ export default function AddMonitor() {
             <Input
               placeholder="https://example.com"
               className="col-span-3"
+              disabled={isPending}
               onChange={(e) => setUrl(e.target.value)}
             />
           </div>
