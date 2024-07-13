@@ -1,4 +1,5 @@
 import { Button } from "@/components/ui/button";
+import AddMonitor from "./_components/add-monitor";
 
 export default function Monitors() {
   return (
@@ -17,7 +18,7 @@ export default function Monitors() {
           <p className="text-sm text-muted-foreground">
             Start by adding a new monitor
           </p>
-          <Button className="mt-4">Add Monitor</Button>
+          <AddMonitor />
         </div>
       </div>
     </main>
