@@ -15,6 +15,7 @@ import { cn } from "@/lib/utils";
 
 import ThemeButton from "./theme-button";
 import Notification from "./notification";
+import StatusBanner from "./status-banner";
 
 export default function Header() {
   const pathname = usePathname();
@@ -61,7 +62,9 @@ export default function Header() {
           </nav>
         </SheetContent>
       </Sheet>
-      <div className="w-full flex-1">{/* Header Content */}</div>
+      <div className="w-full flex-1">
+        <StatusBanner />
+      </div>
       <div className="flex items-center gap-4">
         <ThemeButton />
         <Notification />
