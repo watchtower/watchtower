@@ -2,16 +2,19 @@
 
 import Link from "next/link";
 
-import { Menu, Bell } from "lucide-react";
+import { Menu } from "lucide-react";
 
 import { Button } from "@/components/ui/button";
+import { Badge } from "@/components/ui/badge";
 import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
+import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 
 import { SidebarLinks } from "@/lib/sidebar-links";
 import { usePathname } from "next/navigation";
 import { cn } from "@/lib/utils";
 
-import { ThemeButton } from "./theme-button";
+import ThemeButton from "./theme-button";
+import Notification from "./notification";
 
 export default function Header() {
   const pathname = usePathname();
@@ -48,17 +51,25 @@ export default function Header() {
               >
                 <item.icon className="h-4 w-4" />
                 {item.label}
+                {item.badge && (
+                  <Badge className="ml-auto flex h-6 w-6 shrink-0 items-center justify-center rounded-full">
+                    1
+                  </Badge>
+                )}
               </Link>
             ))}
           </nav>
         </SheetContent>
       </Sheet>
       <div className="w-full flex-1">{/* Header Content */}</div>
-      <ThemeButton />
-
-      <Button variant="ghost" size="icon" className="ml-auto h-8 w-8">
-        <Bell className="h-4 w-4" />
-      </Button>
+      <div className="flex items-center gap-4">
+        <ThemeButton />
+        <Notification />
+        <Avatar className="cursor-pointer">
+          <AvatarImage src="https://github.com/swargaraj.png" alt="@shadcn" />
+          <AvatarFallback>SB</AvatarFallback>
+        </Avatar>
+      </div>
     </header>
   );
 }

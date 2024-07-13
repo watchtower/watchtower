@@ -4,6 +4,7 @@ import {
   LineChart,
   LucideIcon,
   ShieldCheck,
+  Users,
 } from "lucide-react";
 
 type Menu = {
@@ -11,6 +12,7 @@ type Menu = {
   label: string;
   active: boolean;
   icon: LucideIcon;
+  badge: boolean;
 };
 
 export function SidebarLinks(pathname: string): Menu[] {
@@ -20,24 +22,35 @@ export function SidebarLinks(pathname: string): Menu[] {
       label: "Activity",
       active: pathname === "/",
       icon: Activity,
+      badge: false,
     },
     {
       href: "/monitors",
       label: "Monitors",
       active: pathname.includes("/monitors"),
       icon: ShieldCheck,
+      badge: false,
     },
     {
       href: "/incidents",
       label: "Incidents",
       active: pathname.includes("/incidents"),
       icon: CircleAlert,
+      badge: true,
     },
     {
       href: "/pages",
       label: "Pages",
       active: pathname.includes("/pages"),
       icon: LineChart,
+      badge: false,
+    },
+    {
+      href: "/users",
+      label: "Users",
+      active: pathname.includes("/team"),
+      icon: Users,
+      badge: false,
     },
   ];
 }
