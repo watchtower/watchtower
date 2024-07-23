@@ -1,3 +1,8 @@
+/**
+ * Returns an array of SidebarMenu objects for the
+ * global sidebar
+ */
+
 import {
   Activity,
   CircleAlert,
@@ -5,7 +10,7 @@ import {
   LucideIcon,
   ShieldCheck,
   Users,
-} from "lucide-react";
+} from 'lucide-react';
 
 type Menu = {
   href: string;
@@ -18,37 +23,37 @@ type Menu = {
 export function SidebarLinks(pathname: string): Menu[] {
   return [
     {
-      href: "/",
-      label: "Activity",
-      active: pathname === "/",
+      href: '/',
+      label: 'Activity',
+      active: pathname === '/',
       icon: Activity,
       badge: false,
     },
     {
-      href: "/monitors",
-      label: "Monitors",
-      active: pathname.includes("/monitors"),
+      href: '/monitors',
+      label: 'Monitors',
+      active: pathname.includes('/monitors'),
       icon: ShieldCheck,
       badge: false,
     },
     {
-      href: "/incidents",
-      label: "Incidents",
-      active: pathname.includes("/incidents"),
+      href: '/incidents',
+      label: 'Incidents',
+      active: pathname.includes('/incidents'),
       icon: CircleAlert,
       badge: true,
     },
     {
-      href: "/pages",
-      label: "Pages",
-      active: pathname.includes("/pages"),
+      href: '/pages',
+      label: 'Pages',
+      active: pathname.includes('/pages'),
       icon: LineChart,
       badge: false,
     },
     {
-      href: "/users",
-      label: "Users",
-      active: pathname.includes("/team"),
+      href: '/users',
+      label: 'Users',
+      active: pathname.includes('/team'),
       icon: Users,
       badge: false,
     },

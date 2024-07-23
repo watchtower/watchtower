@@ -1,6 +1,6 @@
-"use server";
+'use server';
 
-import { db } from "@/lib/db";
+import { db } from '@/lib/db';
 
 export async function addMonitor(name: string, url: string) {
   const monitor = await db.monitors.create({
@@ -24,7 +24,7 @@ export async function deleteMonitor(id: string) {
 export async function getMonitors() {
   const monitors = await db.monitors.findMany({
     orderBy: {
-      updatedAt: "desc",
+      updatedAt: 'desc',
     },
   });
   return monitors;
