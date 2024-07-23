@@ -51,3 +51,13 @@ export async function updateMonitor(id: string, name: string, url: string) {
   });
   return monitor;
 }
+
+export async function getPingsForMonitor(monitorId: string) {
+  const pings = await db.ping.findMany({
+    orderBy: {
+      start: 'desc'
+    },
+    take: 50
+  })
+  return pings;
+}
