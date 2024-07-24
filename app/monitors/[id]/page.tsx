@@ -7,10 +7,10 @@ export default async function Monitor(props: any) {
 
   return (
     <main>
-      {pings.map(ping =>
+      {pings.map((ping, index) =>
         ping.status >= 400 && ping.status < 500
-        ? <div>green</div>
-        : <div>red</div>
+        ? <div key={index}>green</div>
+        : <div key={index}>red</div>
       )}
     </main>
   );
