@@ -12,7 +12,7 @@ export default function MonitorCard({ monitor }: { monitor: Monitors }) {
         <p className="text-sm text-muted-foreground">{monitor.url}</p>
       </div>
       <Button variant={"outline"} className="w-fit">
-        <Link href={`/monitor/${monitor.id}`}>View Monitor</Link>
+        <Link href={`/monitors/${monitor.id}`}>View Monitor</Link>
       </Button>
     </Card>
   );
