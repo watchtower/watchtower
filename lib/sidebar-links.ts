@@ -6,10 +6,12 @@
 import {
   Activity,
   CircleAlert,
-  LineChart,
+  PanelTop,
   LucideIcon,
-  ShieldCheck,
+  Server,
   Users,
+  Settings,
+  Blocks,
 } from 'lucide-react';
 
 type Menu = {
@@ -24,16 +26,16 @@ export function SidebarLinks(pathname: string): Menu[] {
   return [
     {
       href: '/',
-      label: 'Activity',
+      label: 'Overview',
       active: pathname === '/',
       icon: Activity,
       badge: false,
     },
     {
-      href: '/monitors',
-      label: 'Monitors',
-      active: pathname.includes('/monitors'),
-      icon: ShieldCheck,
+      href: '/services',
+      label: 'Services',
+      active: pathname.includes('/services'),
+      icon: Server,
       badge: false,
     },
     {
@@ -47,14 +49,33 @@ export function SidebarLinks(pathname: string): Menu[] {
       href: '/pages',
       label: 'Pages',
       active: pathname.includes('/pages'),
-      icon: LineChart,
+      icon: PanelTop,
       badge: false,
     },
     {
-      href: '/users',
-      label: 'Users',
-      active: pathname.includes('/team'),
+      href: '/access',
+      label: 'Access',
+      active: pathname.includes('/access'),
       icon: Users,
+      badge: false,
+    },
+    {
+      href: '/integrations',
+      label: 'Integrations',
+      active: pathname.includes('/integrations'),
+      icon: Blocks,
+      badge: false,
+    },
+  ];
+}
+
+export function SecondarySidebarLinks(pathname: string): Menu[] {
+  return [
+    {
+      href: '/settings',
+      label: 'Settings',
+      active: pathname === '/settings',
+      icon: Settings,
       badge: false,
     },
   ];
