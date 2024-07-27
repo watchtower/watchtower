@@ -6,8 +6,6 @@ import { SidebarLinks, SecondarySidebarLinks } from '@/lib/sidebar-links';
 import { usePathname } from 'next/navigation';
 import { cn } from '@/lib/utils';
 
-import { Badge } from '@/components/ui/badge';
-
 export default function Sidebar() {
   const pathname = usePathname();
   const menu = SidebarLinks(pathname);
@@ -16,7 +14,7 @@ export default function Sidebar() {
   return (
     <div className="hidden border-r border-muted bg-secondary md:block select-none">
       <div className="flex h-full max-h-screen flex-col">
-        <div className="flex h-14 items-center border-b border-muted px-4 lg:h-[60px] lg:px-6">
+        <div className="flex h-14 items-center border-b border-muted px-4 lg:h-[60px] lg:px-6 justify-between">
           <Link href="/" className="flex items-center gap-2 font-semibold">
             <span>WatchTower</span>
           </Link>
@@ -29,7 +27,7 @@ export default function Sidebar() {
                   key={item.label}
                   href={item.href}
                   className={cn(
-                    'flex items-center gap-3 px-4 py-2 rounded-md text-muted-foreground hover:text-primary border border-transparent ',
+                    'flex items-center gap-3 px-4 py-2 rounded-lg text-muted-foreground hover:text-primary border border-transparent transition-colors',
                     pathname === item.href
                       ? 'dark:bg-gradient-to-b dark:from-[#252525] dark:to-[#1D1D1D] border border-primary/10 dark:shadow-lg text-primary'
                       : '',
@@ -46,7 +44,7 @@ export default function Sidebar() {
                   key={item.label}
                   href={item.href}
                   className={cn(
-                    'flex items-center gap-3 px-4 py-2 rounded-md text-muted-foreground hover:text-primary border border-transparent ',
+                    'flex items-center gap-3 px-4 py-2 rounded-lg text-muted-foreground hover:text-primary border border-transparent transition-colors',
                     pathname === item.href
                       ? 'dark:bg-gradient-to-b dark:from-[#252525] dark:to-[#1D1D1D] border border-primary/10 dark:shadow-lg text-primary'
                       : '',
@@ -54,7 +52,6 @@ export default function Sidebar() {
                 >
                   <item.icon className="h-4 w-4" />
                   {item.label}
-                  {item.badge && <Badge>1</Badge>}
                 </Link>
               ))}
             </nav>

@@ -8,7 +8,7 @@ import {
   CircleAlert,
   PanelTop,
   LucideIcon,
-  Server,
+  Database,
   Users,
   Settings,
   Blocks,
@@ -35,7 +35,7 @@ export function SidebarLinks(pathname: string): Menu[] {
       href: '/services',
       label: 'Services',
       active: pathname.includes('/services'),
-      icon: Server,
+      icon: Database,
       badge: false,
     },
     {
