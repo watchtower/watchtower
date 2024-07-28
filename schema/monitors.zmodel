@@ -1,0 +1,131 @@
+import 'users'
+
+enum MonitorType {
+  HttpMonitor
+  PingMonitor
+  PortMonitor
+}
+model Monitor {
+  type MonitorType @@delegate(type) @@ignore
+
+  id               String    @id @default(cuid()) @ignore
+  name             String
+  createdAt        DateTime  @default(now())
+  intervalSeconds  Int       @gte(30) @lte(86400)
+
+  teamId String?
+  team   Team?   @relation(fields: [teamId], references: [id])
+
+
+
+// owner == currentUser
+  @@allow('all', )
+    // Either a single owner is attached here, or multiple owners have the monitor attached to them.
+  // How would the allow rule work with multiple owners?
+  // One user has to be paying for the monitor
+
+  // How do I set a policy for...
+  // Users that have a permission attached to them ?
+  // Try it out. What permissions do I want to add?
+
+  // owner pays and is allowed all (soft delete?)
+
+  // owner can only create monitors based on their plan.
+  // But we're not implementing plans yet
+
+  // Free mode, everyone can create infinite monitors, but they have to pay for them.
+}
+abstract model Timeout {
+  timeoutSeconds  Int  @db.SmallInt @gte(1) @lte(60)
+}
+abstract model Response {
+  @@unique(fields: [monitorId, startTime])
+
+  monitorId  String  @ignore
+  startTime  DateTime
+}
+abstract model Incident extends Response {
+  id        String @id @default(cuid()) @ignore
+  ongoing   Boolean
+  comments  IncidentComment[]
+}
+
+model IncidentComment {
+  @@unique([author, createdAt])
+
+  authorId   String @ignore
+  author     User @relation(fields: [authorId], references: [id])
+  createdAt  DateTime @default(now())
+
+  incidentId String @ignore
+  httpIncident   HttpIncident? @relation(fields: [incidentId], references: [id]) @ignore
+  pingIncident   PingIncident? @relation(fields: [incidentId], references: [id]) @ignore
+  portIncident   PortIncident? @relation(fields: [incidentId], references: [id]) @ignore
+  // Add computed `incident` ?
+}
+
+/* -- HTTP -- */
+
+model HttpMonitor extends Monitor, Timeout {
+  url             String   @url @regex('^https?://')
+  // checkSSL        Boolean  @default(false) // Check for SSL expiry
+  // checkDomain     Boolean  @default(false) // Check for domain expiry
+
+  responses HttpResponse[]
+  incidents HttpIncident[]
+}
+model HttpResponse extends Response {
+  monitor         HttpMonitor @relation(fields: [monitorId], references: [id])
+  responseTimeMs  Int @db.SmallInt
+}
+enum HttpIncidentType { Http Timeout }
+model HttpIncident extends Incident {
+  monitor  HttpMonitor @relation(fields: [monitorId], references: [id])
+
+  @@validate(
+    type == Http
+    && httpsStatusCode != null
+    && ( httpsStatusCode < 200 || httpsStatusCode >= 300 )
+  )
+  @@validate( 
+    type == Timeout
+    && httpsStatusCode == null
+    && responseHeaders == null
+  )
+
+  type             HttpIncidentType
+  requestHeaders   Json
+  httpsStatusCode  Int? @db.SmallInt
+  responseHeaders  Json?
+}
+
+/* -- Ping -- */
+
+model PingMonitor extends Monitor {
+  address   String
+  responses PingResponse[]
+  incidents PingIncident[]
+}
+model PingResponse extends Response {
+  monitor         PingMonitor  @relation(fields: [monitorId], references: [id])
+  responseTimeMs  Int @db.SmallInt
+}
+model PingIncident extends Incident {
+  monitor  PingMonitor  @relation(fields: [monitorId], references: [id])
+}
+
+
+/* -- Port -- */
+
+model PortMonitor extends Monitor, Timeout {
+  tcoPort   Int @gte(1) @lte(65535)
+  responses PortResponse[]
+  incidents PortIncident[]
+}
+model PortResponse extends Response {
+  monitor         PortMonitor  @relation(fields: [monitorId], references: [id])
+  responseTimeMs  Int @db.SmallInt
+}
+model PortIncident extends Incident {
+  monitor  PortMonitor  @relation(fields: [monitorId], references: [id])
+}

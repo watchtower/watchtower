@@ -1,0 +1,51 @@
+import 'monitors'
+
+model Team {
+  id          String   @id @default(cuid())
+  name        String
+  description String?
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  // list permissions
+  // grant and deny
+  // Which gets higher priority, team or user policies? depends if grant or deny
+
+  members  TeamMembership[]
+  monitors Monitor[]
+}
+
+model User {
+  id           String   @id @unique @default(cuid())
+  name         String?
+  email        String   @unique @email
+  passwordHash String
+  createdAt    DateTime @default(now())
+
+  memberships TeamMembership[]
+  incidentComments IncidentComment[]
+}
+
+model TeamMembership {
+  id       String   @id @unique @default(cuid())
+  role     Role
+  teamId   String
+  userId   String
+  joinedAt DateTime @default(now())
+
+  team Team @relation(fields: [teamId], references: [id])
+  user User @relation(fields: [userId], references: [id])
+
+  @@unique([teamId, userId])
+}
+
+// Instead of Role, create finer-grained access policies
+enum Role { OWNER MANAGER MEMBER }
+// ? Implement one feature at a time ?
+
+model Tag {
+  name String @id 
+  // add referential actions
+  // and access control
+  // allow owner to edit
+}
