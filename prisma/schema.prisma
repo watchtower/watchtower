@@ -84,6 +84,8 @@ model Service {
   createdAt   DateTime       @default(now())
   updatedAt   DateTime       @updatedAt
 
+  responses ServiceResponse[]
+
   teamId String?
   team   Team?   @relation(fields: [teamId], references: [id])
 }
@@ -97,4 +99,25 @@ enum MonitoringType {
 enum HttpMethod {
   GET
   POST
+}
+
+model ServiceResponse {
+  id               String        @id @unique @default(cuid())
+  serviceId        String
+  startTime        DateTime
+  endTime          DateTime      @default(now())
+  status           ServiceStatus
+  responseTime     Int
+  statusCode       Int?
+  sslExpiryDays    Int?
+  domainExpiryDays Int?
+
+  service Service @relation(fields: [serviceId], references: [id])
+}
+
+enum ServiceStatus {
+  UP
+  DOWN
+  TIMEOUT
+  UNKNOWN
 }
