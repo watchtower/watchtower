@@ -8,35 +8,16 @@ datasource db {
   directUrl = env("DIRECT_URL")
 }
 
-// model Monitors {
-//   id        String   @id @default(cuid())
-//   name      String
-//   url       String
-//   status    Boolean?
-//   createdAt DateTime @default(now())
-//   updatedAt DateTime @updatedAt
-//   pings     Ping[]
-// }
-
-// model Ping {
-//   monitor   Monitors @relation(fields: [monitorId], references: [id])
-//   monitorId String
-//   start     DateTime
-//   end       DateTime
-//   status    Int
-
-//   @@id([monitorId, start])
-// }
-
-model Team {
+model Workspace {
   id          String   @id @unique @default(cuid())
   name        String
   description String?
   createdAt   DateTime @default(now())
   updatedAt   DateTime @updatedAt
 
-  members  TeamMembership[]
+  members  WorkspaceMembership[]
   services Service[]
+  apiKeys  ApiKey[]
 }
 
 model User {
@@ -47,20 +28,20 @@ model User {
   createdAt    DateTime @default(now())
   updatedAt    DateTime @updatedAt
 
-  memberships TeamMembership[]
+  memberships WorkspaceMembership[]
 }
 
-model TeamMembership {
-  id       String   @id @unique @default(cuid())
-  role     Role
-  teamId   String
-  userId   String
-  joinedAt DateTime @default(now())
+model WorkspaceMembership {
+  id          String   @id @unique @default(cuid())
+  role        Role
+  workspaceId String
+  userId      String
+  joinedAt    DateTime @default(now())
 
-  team Team @relation(fields: [teamId], references: [id])
-  user User @relation(fields: [userId], references: [id])
+  workspace Workspace @relation(fields: [workspaceId], references: [id])
+  user      User      @relation(fields: [userId], references: [id])
 
-  @@unique([teamId, userId])
+  @@unique([workspaceId, userId])
 }
 
 enum Role {
@@ -71,23 +52,23 @@ enum Role {
 
 model Service {
   id          String         @id @unique @default(cuid())
-  name        String // Name of the service
-  type        MonitoringType // Type of monitoring (HTTP, Ping, Port)
-  httpUrl     String? // URL of the service
-  httpMethod  HttpMethod? // HTTP method if type is HTTP
-  pingAddress String? // Address for Ping monitoring
-  port        Int? // Port number for Port monitoring
-  interval    Int // Interval between checks in seconds
-  checkSSL    Boolean        @default(false) // Check for SSL expiry
-  checkDomain Boolean        @default(false) // Check for domain expiry
-  timeout     Int? // Timeout for requests in seconds
+  name        String
+  type        MonitoringType
+  httpUrl     String?
+  httpMethod  HttpMethod?
+  pingAddress String?
+  port        Int?
+  interval    Int
+  checkSSL    Boolean        @default(false)
+  checkDomain Boolean        @default(false)
+  timeout     Int?
   createdAt   DateTime       @default(now())
   updatedAt   DateTime       @updatedAt
 
   responses ServiceResponse[]
 
-  teamId String?
-  team   Team?   @relation(fields: [teamId], references: [id])
+  workspaceId String?
+  workspace   Workspace? @relation(fields: [workspaceId], references: [id])
 }
 
 enum MonitoringType {
@@ -120,4 +101,14 @@ enum ServiceStatus {
   DOWN
   TIMEOUT
   UNKNOWN
+}
+
+model ApiKey {
+  id          String    @id @unique @default(cuid())
+  name        String
+  key         String    @unique
+  createdAt   DateTime  @default(now())
+  expiresAt   DateTime?
+  workspaceId String
+  workspace   Workspace @relation(fields: [workspaceId], references: [id])
 }
