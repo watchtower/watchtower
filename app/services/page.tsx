@@ -70,9 +70,7 @@ export default async function Services() {
               <SelectContent>
                 <SelectGroup>
                   <SelectItem value="date">Date Added</SelectItem>
-                  <SelectItem value="alphabetical">
-                    Alphabetical
-                  </SelectItem>
+                  <SelectItem value="alphabetical">Alphabetical</SelectItem>
                 </SelectGroup>
               </SelectContent>
             </Select>
