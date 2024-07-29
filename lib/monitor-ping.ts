@@ -1,4 +1,4 @@
-import { Monitors } from '@prisma/client';
+// import { Monitors } from '@prisma/client';
 import { db } from './db';
 
 // export function ping(monitor: Monitors, start: Date) {
