@@ -10,7 +10,7 @@ import {
   SelectValue,
 } from '@/components/ui/select';
 
-import { getMonitors } from '@/services/monitor';
+// import { getMonitors } from '@/services/monitor';
 
 import ServiceCard from './_components/service';
 
@@ -18,7 +18,8 @@ import Link from 'next/link';
 import { Search } from 'lucide-react';
 
 export default async function Services() {
-  const services = await getMonitors();
+  // const services = await getMonitors();
+  const services: any = [];
   return (
     <main className="flex flex-1 flex-col gap-4 p-4 lg:gap-6 lg:p-6">
       <div className="flex items-center justify-between">
@@ -77,9 +78,9 @@ export default async function Services() {
           </div>
 
           <div className="grid grid-cols-1 gap-4 mt-4 md:grid-cols-2 lg:grid-cols-3">
-            {services.map((monitor) => (
+            {/* {services.map((monitor) => (
               <ServiceCard key={monitor.id} monitor={monitor} />
-            ))}
+            ))} */}
           </div>
         </div>
       )}
