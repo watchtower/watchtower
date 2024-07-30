@@ -3,16 +3,14 @@
 import { db } from '@/lib/db';
 import { Workspace } from '@prisma/client';
 
-type CreateWorkspaceInput = {
+type CreateWorkspace = {
   name: string;
   description?: string;
-  userId: string;
+  ownerId: string;
 };
 
-async function createWorkspace(
-  input: CreateWorkspaceInput,
-): Promise<Workspace> {
-  const { name, description, userId } = input;
+async function createWorkspace(input: CreateWorkspace): Promise<Workspace> {
+  const { name, description, ownerId } = input;
 
   try {
     const workspace = await db.workspace.create({
@@ -24,7 +22,7 @@ async function createWorkspace(
             role: 'OWNER',
             user: {
               connect: {
-                id: userId,
+                id: ownerId,
               },
             },
           },
@@ -64,6 +62,25 @@ async function getWorkspace(workspaceId: string): Promise<Workspace | null> {
   }
 }
 
+async function getWorkspaces(): Promise<Workspace[]> {
+  try {
+    const workspaces = await db.workspace.findMany({
+      include: {
+        members: {
+          include: {
+            user: true,
+          },
+        },
+        services: true,
+        apiKeys: true,
+      },
+    });
+    return workspaces;
+  } catch (error) {
+    throw error;
+  }
+}
+
 async function deleteWorkspace(workspaceId: string): Promise<void> {
   try {
     await db.workspace.delete({
@@ -76,4 +93,4 @@ async function deleteWorkspace(workspaceId: string): Promise<void> {
   }
 }
 
-export { createWorkspace, getWorkspace, deleteWorkspace };
+export { createWorkspace, getWorkspace, getWorkspaces, deleteWorkspace };

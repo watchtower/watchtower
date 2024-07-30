@@ -3,7 +3,7 @@
 import { db } from '@/lib/db';
 import { type Service } from '@prisma/client';
 
-async function addService(input: Service): Promise<Service> {
+export async function addService(input: Service): Promise<Service> {
   const {
     name,
     type,
@@ -49,7 +49,7 @@ async function addService(input: Service): Promise<Service> {
   }
 }
 
-async function deleteService(serviceId: string): Promise<void> {
+export async function deleteService(serviceId: string): Promise<void> {
   if (!serviceId) {
     throw new Error('serviceId is required and must be a non-null string');
   }
@@ -66,7 +66,7 @@ async function deleteService(serviceId: string): Promise<void> {
   }
 }
 
-async function getService(serviceId: string): Promise<Service | null> {
+export async function getService(serviceId: string): Promise<Service | null> {
   if (!serviceId) {
     throw new Error('serviceId is required and must be a non-null string');
   }
@@ -84,7 +84,7 @@ async function getService(serviceId: string): Promise<Service | null> {
   }
 }
 
-async function getServices(workspaceId: string): Promise<Service[]> {
+export async function getServices(workspaceId: string): Promise<Service[]> {
   if (!workspaceId) {
     throw new Error('workspaceId is required and must be a non-null string');
   }
@@ -101,8 +101,6 @@ async function getServices(workspaceId: string): Promise<Service[]> {
     throw error;
   }
 }
-
-export { addService, getService, getServices, deleteService };
 
 // export async function getMonitors() {
 //   const monitors = await db.monitors.findMany({
