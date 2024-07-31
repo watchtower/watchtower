@@ -19,7 +19,7 @@ model Monitor {
 
 
 // owner == currentUser
-  @@allow('all', )
+  // @@allow('all', )
     // Either a single owner is attached here, or multiple owners have the monitor attached to them.
   // How would the allow rule work with multiple owners?
   // One user has to be paying for the monitor
