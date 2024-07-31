@@ -1,46 +1,74 @@
 import 'monitors'
 
-model Team {
-  id          String   @id @default(cuid())
-  name        String
-  description String?
-  createdAt   DateTime @default(now())
-  updatedAt   DateTime @updatedAt
+model Project {
+  id             String              @id @default(cuid())
+  name           String
+  description    String?
+  createdAt      DateTime            @default(now())
+  updatedAt      DateTime            @updatedAt
 
   // list permissions
   // grant and deny
   // Which gets higher priority, team or user policies? depends if grant or deny
 
-  members  TeamMembership[]
-  monitors Monitor[]
+  accessPolicies AccessPolicy[]
+  members        ProjectMembership[]
+  monitors       Monitor[]
 }
 
 model User {
-  id           String   @id @unique @default(cuid())
-  name         String?
-  email        String   @unique @email
-  passwordHash String
-  createdAt    DateTime @default(now())
+  id               String              @id @unique @default(cuid())
+  name             String?
+  email            String              @unique @email
+  passwordHash     String
+  createdAt        DateTime            @default(now())
 
-  memberships TeamMembership[]
+  memberships      ProjectMembership[]
+  accessPolicies   AccessPolicy[]
   incidentComments IncidentComment[]
 }
 
-model TeamMembership {
-  id       String   @id @unique @default(cuid())
-  role     Role
-  teamId   String
-  userId   String
-  joinedAt DateTime @default(now())
+model ProjectMembership {
+  id        String   @id @unique @default(cuid())
+  projectId String
+  userId    String
+  joinedAt  DateTime @default(now())
 
-  team Team @relation(fields: [teamId], references: [id])
-  user User @relation(fields: [userId], references: [id])
+  team      Project  @relation(fields: [projectId], references: [id])
+  user      User     @relation(fields: [userId], references: [id])
 
-  @@unique([teamId, userId])
+  @@unique([projectId, userId])
 }
 
 // Instead of Role, create finer-grained access policies
-enum Role { OWNER MANAGER MEMBER }
+
+model AccessPolicy {
+  id          String       @id @default(cuid())
+  projectId   String?
+  userId      String?
+  createdAt   DateTime     @default(now())
+
+  project     Project?     @relation(fields: [projectId], references: [id])
+  user        User?        @relation(fields: [userId], references: [id])
+  permissions Permission[]
+}
+
+model Permission {
+  id             String       @id @default(cuid())
+  accessPolicyId String
+  resource       String
+  action         String
+  effect         Effect
+  createdAt      DateTime     @default(now())
+
+  accessPolicy   AccessPolicy @relation(fields: [accessPolicyId], references: [id])
+}
+
+enum Effect {
+  ALLOW
+  DENY
+}
+
 // ? Implement one feature at a time ?
 
 model Tag {
