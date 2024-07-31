@@ -8,7 +8,7 @@ enum MonitorType {
 model Monitor {
   type MonitorType @@delegate(type) @@ignore
 
-  id               String    @id @default(cuid()) @ignore
+  id               String    @id @default(cuid())
   name             String
   createdAt        DateTime  @default(now())
   intervalSeconds  Int       @gte(30) @lte(86400)
