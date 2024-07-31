@@ -7,7 +7,7 @@
     "build": "next build",
     "start": "next start",
     "lint": "next lint",
-    "zenstack": "zenstack generate --schema schema/main.zmodel",
+    "zenstack": "zenstack generate --schema schema/main.zmodel --output prisma",
     "postinstall": "npm run zenstack"
   },
   "dependencies": {
