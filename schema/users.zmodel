@@ -14,6 +14,39 @@ model Project {
   accessPolicies AccessPolicy[]
   members        ProjectMembership[]
   monitors       Monitor[]
+  tags           ProjectTag[]
+}
+
+
+model ProjectMembership {
+  id        String   @id @unique @default(cuid())
+  projectId String
+  userId    String
+  joinedAt  DateTime @default(now())
+
+  team      Project  @relation(fields: [projectId], references: [id])
+  user      User     @relation(fields: [userId], references: [id])
+
+  @@unique([projectId, userId])
+}
+
+model Tag {
+  id          String       @id @default(cuid())
+  name        String       @unique
+  createdAt   DateTime     @default(now())
+
+  projectTags ProjectTag[]
+}
+
+model ProjectTag {
+  id        String  @id @default(cuid())
+  projectId String
+  tagId     String
+
+  project   Project @relation(fields: [projectId], references: [id], onDelete: Cascade)
+  tag       Tag     @relation(fields: [tagId], references: [id], onDelete: Cascade)
+
+  @@unique([projectId, tagId])
 }
 
 model User {
@@ -28,19 +61,7 @@ model User {
   incidentComments IncidentComment[]
 }
 
-model ProjectMembership {
-  id        String   @id @unique @default(cuid())
-  projectId String
-  userId    String
-  joinedAt  DateTime @default(now())
-
-  team      Project  @relation(fields: [projectId], references: [id])
-  user      User     @relation(fields: [userId], references: [id])
-
-  @@unique([projectId, userId])
-}
-
-// Instead of Role, create finer-grained access policies
+// Basic implementation of fine-grained access policies
 
 model AccessPolicy {
   id          String       @id @default(cuid())
@@ -53,27 +74,33 @@ model AccessPolicy {
   permissions Permission[]
 }
 
+
 model Permission {
   id             String       @id @default(cuid())
   accessPolicyId String
-  resource       String
-  action         String
+  resource       Resource
+  action         Action
   effect         Effect
   createdAt      DateTime     @default(now())
 
   accessPolicy   AccessPolicy @relation(fields: [accessPolicyId], references: [id])
 }
 
+enum Resource {
+  PROJECT
+  MONITOR
+  USER
+  TAG
+}
+
+enum Action {
+  CREATE
+  READ
+  UPDATE
+  DELETE
+}
+
 enum Effect {
   ALLOW
   DENY
-}
-
-// ? Implement one feature at a time ?
-
-model Tag {
-  name String @id 
-  // add referential actions
-  // and access control
-  // allow owner to edit
 }
