@@ -1,0 +1,106 @@
+import 'monitors'
+
+model Project {
+  id             String              @id @default(cuid())
+  name           String
+  description    String?
+  createdAt      DateTime            @default(now())
+  updatedAt      DateTime            @updatedAt
+
+  // list permissions
+  // grant and deny
+  // Which gets higher priority, team or user policies? depends if grant or deny
+
+  accessPolicies AccessPolicy[]
+  members        ProjectMembership[]
+  monitors       Monitor[]
+  tags           ProjectTag[]
+}
+
+
+model ProjectMembership {
+  id        String   @id @unique @default(cuid())
+  projectId String
+  userId    String
+  joinedAt  DateTime @default(now())
+
+  team      Project  @relation(fields: [projectId], references: [id])
+  user      User     @relation(fields: [userId], references: [id])
+
+  @@unique([projectId, userId])
+}
+
+model Tag {
+  id          String       @id @default(cuid())
+  name        String       @unique
+  createdAt   DateTime     @default(now())
+
+  projectTags ProjectTag[]
+}
+
+model ProjectTag {
+  id        String  @id @default(cuid())
+  projectId String
+  tagId     String
+
+  project   Project @relation(fields: [projectId], references: [id], onDelete: Cascade)
+  tag       Tag     @relation(fields: [tagId], references: [id], onDelete: Cascade)
+
+  @@unique([projectId, tagId])
+}
+
+model User {
+  id               String              @id @unique @default(cuid())
+  name             String?
+  email            String              @unique @email
+  passwordHash     String
+  createdAt        DateTime            @default(now())
+
+  memberships      ProjectMembership[]
+  accessPolicies   AccessPolicy[]
+  incidentComments IncidentComment[]
+}
+
+// Basic implementation of fine-grained access policies
+
+model AccessPolicy {
+  id          String       @id @default(cuid())
+  projectId   String?
+  userId      String?
+  createdAt   DateTime     @default(now())
+
+  project     Project?     @relation(fields: [projectId], references: [id])
+  user        User?        @relation(fields: [userId], references: [id])
+  permissions Permission[]
+}
+
+
+model Permission {
+  id             String       @id @default(cuid())
+  accessPolicyId String
+  resource       Resource
+  action         Action
+  effect         Effect
+  createdAt      DateTime     @default(now())
+
+  accessPolicy   AccessPolicy @relation(fields: [accessPolicyId], references: [id])
+}
+
+enum Resource {
+  PROJECT
+  MONITOR
+  USER
+  TAG
+}
+
+enum Action {
+  CREATE
+  READ
+  UPDATE
+  DELETE
+}
+
+enum Effect {
+  ALLOW
+  DENY
+}

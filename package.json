@@ -6,7 +6,9 @@
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
-    "lint": "next lint"
+    "lint": "next lint",
+    "zenstack": "zenstack generate --schema schema/main.zmodel --output prisma",
+    "postinstall": "npm run zenstack"
   },
   "dependencies": {
     "@headlessui/react": "^2.1.2",
@@ -21,6 +23,7 @@
     "@radix-ui/react-select": "^2.1.1",
     "@radix-ui/react-slot": "^1.1.0",
     "@tremor/react": "^3.17.4",
+    "@zenstackhq/runtime": "2.3.3",
     "class-variance-authority": "^0.7.0",
     "clsx": "^2.1.1",
     "lucide-react": "^0.417.0",
@@ -43,6 +46,7 @@
     "postcss": "^8",
     "prisma": "^5.17.0",
     "tailwindcss": "^3.4.6",
-    "typescript": "^5"
+    "typescript": "^5",
+    "zenstack": "2.3.3"
   }
 }
